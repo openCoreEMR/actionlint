@@ -1,0 +1,18 @@
+on:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # A reusable workflow checking out its own repository at the commit its
+      # caller pinned, the use case the job.workflow_* properties exist for.
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ job.workflow_repository }}
+          ref: ${{ job.workflow_sha }}
+          path: workflow-src
+      - run: echo "$WORKFLOW_REF $WORKFLOW_FILE_PATH"
+        env:
+          WORKFLOW_REF: ${{ job.workflow_ref }}
+          WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
